@@ -5,7 +5,9 @@ import ExploreArtworks from "../Pages/ExploreArtworks";
 import AddArtwork from "../Pages/AddArtwork";
 import MyGallery from "../Pages/MyGallery";
 import MyFavorites from "../Pages/MyFavorites";
-import ErrorPage from "../Pages/ErrorPage";
+import Login from "../Auth/Login";
+import Registration from "../Auth/Registration";
+import AuthLayout from "../Layout/AuthLayout";
 
 export const router = createBrowserRouter([
   {
@@ -35,7 +37,17 @@ export const router = createBrowserRouter([
     ],
   },
   {
-    path: "*",
-    element: <ErrorPage></ErrorPage>,
+    path: "/auth",
+    element: <AuthLayout></AuthLayout>,
+    children: [
+      {
+        path: "/auth/login",
+        element: <Login></Login>,
+      },
+      {
+        path: "/auth/registration",
+        element: <Registration></Registration>,
+      },
+    ],
   },
 ]);
