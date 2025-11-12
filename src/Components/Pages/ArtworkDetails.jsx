@@ -1,9 +1,31 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useLoaderData } from "react-router-dom";
 
 const ArtworkDetails = () => {
   const data = useLoaderData();
   const artwork = data?.result;
+
+  const [likes, setLikes] = useState(artwork?.like || 0);
+
+  const handleLike = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/artwork/${artwork._id}/like`,
+        {
+          method: "PATCH",
+        }
+      );
+
+      const result = await response.json();
+      if (result.success) {
+        setLikes(likes + 1);
+      } else {
+        alert("Failed to increase like count!");
+      }
+    } catch (error) {
+      console.error("Error increasing like:", error);
+    }
+  };
 
   if (!artwork) return <p>Loading artwork...</p>;
 
@@ -58,7 +80,12 @@ const ArtworkDetails = () => {
             >
               Favorites
             </Link>
-            <button className="btn btn-primary rounded-full ml-1">Like</button>
+            <button
+              onClick={handleLike}
+              className="btn btn-primary rounded-full ml-1"
+            >
+              Like
+            </button>
           </div>
         </div>
       </div>

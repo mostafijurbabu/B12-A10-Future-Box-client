@@ -31,11 +31,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "/artwork/:id",
-        element: (
-          <PrivateRouter>
-            <ArtworkDetails />
-          </PrivateRouter>
-        ),
+        element: <ArtworkDetails />,
 
         loader: ({ params }) =>
           fetch(`http://localhost:3000/artwork/${params.id}`),
