@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router";
+import { createBrowserRouter } from "react-router-dom";
 import MainLayout from "../Layout/MainLayout";
 import Home from "../Home/Home";
 import ExploreArtworks from "../Pages/ExploreArtworks";
@@ -8,6 +8,9 @@ import MyFavorites from "../Pages/MyFavorites";
 import Login from "../Auth/Login";
 import Registration from "../Auth/Registration";
 import AuthLayout from "../Layout/AuthLayout";
+import PrivateRouter from "./PrivateRouter";
+import ArtworkDetails from "../Pages/ArtworkDetails";
+import Loading from "../Loading";
 
 export const router = createBrowserRouter([
   {
@@ -17,22 +20,66 @@ export const router = createBrowserRouter([
       {
         index: true,
         element: <Home></Home>,
+        loader: () => fetch("http://localhost:3000/featured-artwork-section"),
+        hydrateFallbackElement: <Loading />,
       },
       {
-        index: "explore_artworks",
+        path: "explore_artworks",
         element: <ExploreArtworks></ExploreArtworks>,
+        loader: () => fetch("http://localhost:3000/artwork"),
+        hydrateFallbackElement: <Loading />,
       },
       {
-        index: "add_artworks",
-        element: <AddArtwork></AddArtwork>,
+        path: "/artwork/:id",
+        element: (
+          <PrivateRouter>
+            <ArtworkDetails />
+          </PrivateRouter>
+        ),
+
+        loader: ({ params }) =>
+          fetch(`http://localhost:3000/artwork/${params.id}`),
+        hydrateFallbackElement: <Loading />,
       },
       {
-        index: "my_gallery",
-        element: <MyGallery></MyGallery>,
+        path: "add_artworks",
+        element: (
+          <PrivateRouter>
+            <AddArtwork />
+          </PrivateRouter>
+        ),
       },
       {
-        index: "my_favorites",
-        element: <MyFavorites></MyFavorites>,
+        path: "add_artworks/:id",
+        element: (
+          <PrivateRouter>
+            <AddArtwork />
+          </PrivateRouter>
+        ),
+      },
+      {
+        path: "my_gallery",
+        element: (
+          <PrivateRouter>
+            <MyGallery />
+          </PrivateRouter>
+        ),
+      },
+      {
+        path: "my_favorites",
+        element: (
+          <PrivateRouter>
+            <MyFavorites />
+          </PrivateRouter>
+        ),
+      },
+      {
+        path: "my_favorites/:id",
+        element: (
+          <PrivateRouter>
+            <MyFavorites />
+          </PrivateRouter>
+        ),
       },
     ],
   },

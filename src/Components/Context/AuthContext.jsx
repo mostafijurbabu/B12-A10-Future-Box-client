@@ -1,7 +1,6 @@
-import React from "react";
+import { createContext } from "react";
 
-const AuthContext = () => {
-  return <div></div>;
-};
-
-export default AuthContext;
+export const AuthContext = createContext({
+  user: null,
+  loading: false,
+});

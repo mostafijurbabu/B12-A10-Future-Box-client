@@ -1,8 +1,21 @@
-import React from "react";
+import React, { use } from "react";
 import logoImage from "../assets/artlogo.jpeg";
 import { Link, NavLink } from "react-router";
+import { AuthContext } from "./Context/AuthProvider";
+import userIcon from "../assets/user.png";
 
 const Navbar = () => {
+  const { user, logOut } = use(AuthContext);
+  const handleLogOut = () => {
+    console.log("user trying to LogOut");
+    logOut()
+      .then(() => {
+        alert("you logged out successfully");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   const links = (
     <div className="font-semibold flex">
       <li>
@@ -22,9 +35,9 @@ const Navbar = () => {
       </li>
     </div>
   );
-
   return (
     <div className="navbar bg-base-100 shadow-sm max-w-7xl mx-auto">
+      <div className="">{user && user.email}</div>
       <div className="navbar-start">
         <div className="dropdown">
           <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -60,9 +73,28 @@ const Navbar = () => {
         <ul className="menu menu-horizontal px-1">{links}</ul>
       </div>
       <div className="navbar-end">
-        <Link to="/auth/login" className="btn btn-primary px-10 text-md">
-          Login
-        </Link>
+        <div className="login-btn flex gap-4">
+          <img
+            className="w-12 rounded-full"
+            src={`${user ? user.photoURL : userIcon}`}
+            alt=""
+          />
+          {user ? (
+            <button
+              onClick={handleLogOut}
+              className="btn btn-primary ml-2 px-10"
+            >
+              LogOut
+            </button>
+          ) : (
+            <Link
+              to="/auth/login"
+              className="btn btn-primary ml-2 px-10 text-md"
+            >
+              Login
+            </Link>
+          )}
+        </div>
       </div>
     </div>
   );

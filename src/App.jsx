@@ -1,11 +1,16 @@
-import "./App.css";
+import { AuthContext } from "./Context/AuthContext";
+import { RouterProvider } from "react-router-dom";
+import { router } from "./Router/router";
 
-function App() {
+const App = () => {
+  const user = { name: "bablu mia" };
+  const loading = false;
+
   return (
-    <>
-      <h1>Future Box</h1>
-    </>
+    <AuthContext.Provider value={{ user, loading }}>
+      <RouterProvider router={router} />
+    </AuthContext.Provider>
   );
-}
+};
 
 export default App;

@@ -4,8 +4,12 @@ import "swiper/css";
 import colorImage from "../../assets/color5.jpg";
 import natureImage from "../../assets/nature1.jpg";
 import boatImage from "../../assets/boat.jpg";
+import { useLoaderData } from "react-router";
+import { ArtCard } from "../ArtCard";
 
 export default function Home() {
+  const data = useLoaderData();
+  console.log(data);
   return (
     <div className="max-w-7xl mx-auto">
       <div>
@@ -44,6 +48,16 @@ export default function Home() {
           />
         </SwiperSlide>
       </Swiper>
+      <div>
+        <h2 className="text-5xl text-center font-bold text-red-500 pb-10">
+          Latest <span className="text-sky-600">Artworks</span>{" "}
+        </h2>
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+          {data.map((artwork) => (
+            <ArtCard artwork={artwork} />
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
