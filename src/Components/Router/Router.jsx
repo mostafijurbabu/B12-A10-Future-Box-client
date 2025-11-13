@@ -39,43 +39,23 @@ export const router = createBrowserRouter([
       },
       {
         path: "add_artworks",
-        element: (
-          <PrivateRouter>
-            <AddArtwork />
-          </PrivateRouter>
-        ),
+        element: <AddArtwork />,
       },
       {
         path: "add_artworks/:id",
-        element: (
-          <PrivateRouter>
-            <AddArtwork />
-          </PrivateRouter>
-        ),
+        element: <AddArtwork />,
       },
       {
         path: "my_gallery",
-        element: (
-          <PrivateRouter>
-            <MyGallery />
-          </PrivateRouter>
-        ),
+        element: <MyGallery />,
       },
       {
         path: "my_favorites",
-        element: (
-          <PrivateRouter>
-            <MyFavorites />
-          </PrivateRouter>
-        ),
+        element: <MyFavorites />,
       },
       {
         path: "my_favorites/:id",
-        element: (
-          <PrivateRouter>
-            <MyFavorites />
-          </PrivateRouter>
-        ),
+        element: <MyFavorites />,
       },
     ],
   },

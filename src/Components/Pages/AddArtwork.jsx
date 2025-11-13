@@ -17,16 +17,19 @@ const AddArtwork = () => {
     }
 
     const formData = {
+      image: e.target.image.value,
       title: e.target.title.value,
       category: e.target.category.value,
       description: e.target.description.value,
+      price: parseFloat(e.target.price.value),
       like: 0,
-      created_by: user.email,
+      userEmail: user.email,
+      created_by: user.displayName || user.email,
     };
 
     setLoading(true);
 
-    fetch("http://localhost:3000/artworks", {
+    fetch("http://localhost:3000/artwork", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formData),
@@ -52,6 +55,18 @@ const AddArtwork = () => {
       <div className="card-body p-6 relative">
         <h2 className="text-2xl font-bold text-center mb-6">Add New Artwork</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Image Field */}
+          <div>
+            <label className="label font-medium">Image URL</label>
+            <input
+              type="text"
+              name="image"
+              required
+              placeholder="https://i.ibb.co.com/1tgHvZBX/color3.jpg"
+              className="input w-full rounded-full focus:border-0 focus:outline-gray-200"
+            />
+          </div>
+
           {/* Title Field */}
           <div>
             <label className="label font-medium">Title</label>
@@ -82,6 +97,17 @@ const AddArtwork = () => {
                 </option>
               ))}
             </select>
+          </div>
+          {/* Price Field */}
+          <div>
+            <label className="label font-medium">Price (USD)</label>
+            <input
+              type="number"
+              name="price"
+              required
+              placeholder="$200"
+              className="input w-full rounded-full focus:border-0 focus:outline-gray-200"
+            />
           </div>
 
           {/* Description Field */}
