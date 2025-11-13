@@ -1,93 +1,81 @@
-import React, { useState } from "react";
-import { Link, useLoaderData } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { useAuth } from "../../Hooks/useAuth";
+import toast from "react-hot-toast";
 
 const ArtworkDetails = () => {
-  const data = useLoaderData();
-  const artwork = data?.result;
+  const { id } = useParams();
+  const { user } = useAuth();
+  const [art, setArt] = useState(null);
 
-  const [likes, setLikes] = useState(artwork?.like || 0);
+  // Fetch artwork details
+  useEffect(() => {
+    fetch(`http://localhost:3000/artwork/${id}`)
+      .then((res) => res.json())
+      .then((data) => setArt(data.result));
+  }, [id]);
 
-  const handleLike = async () => {
-    try {
-      const response = await fetch(
-        `http://localhost:3000/artwork/${artwork._id}/like`,
-        {
-          method: "PATCH",
-        }
-      );
+  if (!art) return <p>Loading artwork details...</p>;
 
-      const result = await response.json();
-      if (result.success) {
-        setLikes(likes + 1);
-      } else {
-        alert("Failed to increase like count!");
-      }
-    } catch (error) {
-      console.error("Error increasing like:", error);
-    }
+  // Like button function
+  const handleLike = () => {
+    fetch(`http://localhost:3000/artwork/${id}/like`, {
+      method: "PATCH",
+    })
+      .then((res) => res.json())
+      .then(() => {
+        setArt({ ...art, like: art.like + 1 }); // locally update like count
+        toast.success("Liked!");
+      });
   };
 
-  if (!artwork) return <p>Loading artwork...</p>;
+  // Add to favorites
+  const handleAddToFavorites = () => {
+    if (!user?.email) {
+      toast.error("You must login to add favorites");
+      return;
+    }
 
-  const artist = artwork["artist info"];
+    fetch(`http://localhost:3000/artwork/${id}/favorite`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ userEmail: user.email }),
+    })
+      .then((res) => res.json())
+      .then(() => toast.success("Added to favorites!"));
+  };
 
   return (
-    <div className="max-w-7xl mx-auto">
-      <h2 className="text-5xl font-bold text-red-500 text-center pb-10">
-        Artwork <span className="text-sky-500">Details</span>{" "}
-      </h2>
-      <div className="flex justify-around gap-6">
-        <div className="p-10">
-          <img
-            src={artwork.image}
-            alt=""
-            className="rounded-sm w-200 h-100 object-cover"
-          />
-        </div>
-        <div className="grid grid-cols-1 mt-10">
-          <h2 className="font-bold text-4xl">Title: {artwork.title}</h2>
-          <h3 className="font-bold text-2xl">Category: {artwork.category}</h3>
-          <h4>{artwork.dimensions}</h4>
-          <h4>Price: ${artwork.price}</h4>
-          <h3>{artwork.visibility}</h3>
-          <h2>Like:{artwork.like}</h2>
-          <h3 className="">Description: {artwork.description}</h3>
+    <div className="max-w-4xl mx-auto py-10 px-4">
+      {/* Artwork Image */}
+      <img
+        src={art.image}
+        alt={art.title}
+        className="w-full h-96 object-cover rounded-lg mb-4"
+      />
 
-          {artist && (
-            <div className="mt-6 border-t pt-4">
-              <div className="flex items-center gap-4">
-                {/* Optional: show photo if available */}
-                {artist.photo && (
-                  <img
-                    src={artist.photo}
-                    alt={artist.name}
-                    className="w-8 h-8 rounded-full object-cover border-2 bg-sky-600"
-                  />
-                )}
-                <div>
-                  <h3 className="font-bold text-xl">{artist.name}</h3>
-                  <p className="text-sm text-gray-600">
-                    Total artworks: {artist["total artworks"]}
-                  </p>
-                </div>
-              </div>
-            </div>
-          )}
-          <div className="text-center p-10">
-            <Link
-              to={`/my_favorites/${artwork._id}}`}
-              className="btn btn-primary rounded-full px-30 text-center bg-linear-to-r from-sky-500 to-red-600 text-white border-0 hover:from-sky-600 hover:to-red-700"
-            >
-              Favorites
-            </Link>
-            <button
-              onClick={handleLike}
-              className="btn btn-primary rounded-full ml-1"
-            >
-              Like
-            </button>
-          </div>
-        </div>
+      {/* Artwork Details */}
+      <h2 className="text-3xl font-bold mb-2">{art.title}</h2>
+      <p className="text-gray-600 mb-2">By: {art.created_by}</p>
+      <p className="text-gray-600 mb-2">Category: {art.category}</p>
+      <p className="font-bold mb-2">${art.price}</p>
+      <p className="mb-4">{art.description}</p>
+
+      {/* Like & Add to Favorites Buttons */}
+      <div className="flex gap-4">
+        <button
+          onClick={handleLike}
+          className="px-20 py-2 btn btn-primary text-white rounded-full"
+        >
+          Like ({art.like})
+        </button>
+
+        <button
+          onClick={handleAddToFavorites}
+          className="px-12 py-2 bg-red-500 text-white rounded-full"
+        >
+          Add to Favorites
+        </button>
       </div>
     </div>
   );
