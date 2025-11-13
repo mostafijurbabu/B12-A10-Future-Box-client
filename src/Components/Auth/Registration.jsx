@@ -6,31 +6,42 @@ import { AuthContext } from "../Context/AuthProvider";
 const Registration = () => {
   const { createUser, setUser, updateUser } = useContext(AuthContext);
   const [nameError, setNameError] = useState("");
-
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
+
+  const validatePassword = (password) => {
+    const regex = /^(?=.*[a-z])(?=.*[A-Z]).{6,}$/;
+    return regex.test(password);
+  };
 
   const handleRegister = (e) => {
     e.preventDefault();
-    console.log(e.target);
     const form = e.target;
     const name = form.name.value;
+    const email = form.email.value;
+    const photo = form.photo.value;
+    const pwd = form.password.value;
+
     if (name.length < 5) {
-      setNameError("Name should be more then 5 character");
+      setNameError("Name should be more than 5 characters");
       return;
     } else {
       setNameError("");
     }
-    const email = form.email.value;
-    const photo = form.photo.value;
-    const password = form.password.value;
-    console.log({ name, email, photo, password });
-    createUser(email, password)
+
+    if (!validatePassword(pwd)) {
+      alert(
+        "Password must be at least 6 characters, include uppercase and lowercase letters!"
+      );
+      return;
+    }
+
+    createUser(email, pwd)
       .then((result) => {
         const user = result.user;
-        // console.log(user);
-        updateUser({ displayName: name, PhotoURL: photo })
+        updateUser({ displayName: name, photoURL: photo })
           .then(() => {
-            setUser({ ...user, displayName: name, PhotoURL: photo });
+            setUser({ ...user, displayName: name, photoURL: photo });
             navigate("/");
           })
           .catch((error) => {
@@ -39,12 +50,10 @@ const Registration = () => {
           });
       })
       .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        alert(errorCode, errorMessage);
-        // ..
+        alert(error.message);
       });
   };
+
   return (
     <div className="bg-base-200 flex justify-center min-h-screen items-center">
       <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
@@ -53,7 +62,7 @@ const Registration = () => {
         </h2>
         <form onSubmit={handleRegister} className="card-body">
           <fieldset className="fieldset">
-            {/* name */}
+            {/* Name */}
             <label className="label">Name</label>
             <input
               name="name"
@@ -62,10 +71,9 @@ const Registration = () => {
               placeholder="Name"
               required
             />
-
             {nameError && <p className="text-xs text-error">{nameError}</p>}
 
-            {/* email */}
+            {/* Email */}
             <label className="label">Email</label>
             <input
               name="email"
@@ -75,17 +83,17 @@ const Registration = () => {
               required
             />
 
-            {/* photo URL */}
+            {/* Photo URL */}
             <label className="label">PhotoURL</label>
             <input
               name="photo"
-              type="Photo URL"
+              type="text"
               className="input"
-              placeholder="PhotoURL"
+              placeholder="Photo URL"
               required
             />
 
-            {/* password */}
+            {/* Password */}
             <label className="label">Password</label>
             <input
               name="password"
@@ -93,14 +101,24 @@ const Registration = () => {
               className="input"
               placeholder="Password"
               required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
 
+            {password && !validatePassword(password) && (
+              <p className="text-xs text-error mt-1">
+                Password must be 6+ characters, include uppercase & lowercase.
+              </p>
+            )}
+
+            {/* Buttons */}
             <button type="submit" className="btn btn-primary mt-4">
               Register
             </button>
             <button className="btn btn-primary btn-outline mt-4">
               <FcGoogle size={24} /> Login With Google
             </button>
+
             <p className="font-semibold text-center pt-3">
               Already Have An Account ?{" "}
               <Link to="/auth/login" className="text-red-500">
