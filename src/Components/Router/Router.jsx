@@ -8,9 +8,9 @@ import MyFavorites from "../Pages/MyFavorites";
 import Login from "../Auth/Login";
 import Registration from "../Auth/Registration";
 import AuthLayout from "../Layout/AuthLayout";
-import PrivateRouter from "./PrivateRouter";
 import ArtworkDetails from "../Pages/ArtworkDetails";
 import Loading from "../Loading";
+import PrivateRouter from "../Router/PrivateRouter";
 
 export const router = createBrowserRouter([
   {
@@ -31,31 +31,54 @@ export const router = createBrowserRouter([
       },
       {
         path: "/artwork/:id",
-        element: <ArtworkDetails />,
-
+        element: (
+          <PrivateRouter>
+            <ArtworkDetails />
+          </PrivateRouter>
+        ),
         loader: ({ params }) =>
           fetch(`http://localhost:3000/artwork/${params.id}`),
         hydrateFallbackElement: <Loading />,
       },
       {
         path: "add_artworks",
-        element: <AddArtwork />,
+        element: (
+          <PrivateRouter>
+            <AddArtwork />
+          </PrivateRouter>
+        ),
       },
       {
         path: "add_artworks/:id",
-        element: <AddArtwork />,
+        element: (
+          <PrivateRouter>
+            <AddArtwork />
+          </PrivateRouter>
+        ),
       },
       {
         path: "my_gallery",
-        element: <MyGallery />,
+        element: (
+          <PrivateRouter>
+            <MyGallery />
+          </PrivateRouter>
+        ),
       },
       {
         path: "my_favorites",
-        element: <MyFavorites />,
+        element: (
+          <PrivateRouter>
+            <MyFavorites />
+          </PrivateRouter>
+        ),
       },
       {
         path: "my_favorites/:id",
-        element: <MyFavorites />,
+        element: (
+          <PrivateRouter>
+            <MyFavorites />
+          </PrivateRouter>
+        ),
       },
     ],
   },

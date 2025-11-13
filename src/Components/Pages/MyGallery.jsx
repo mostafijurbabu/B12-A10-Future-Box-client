@@ -104,13 +104,13 @@ const MyGallery = () => {
               <div className="flex justify-between mt-3">
                 <button
                   onClick={() => setSelectedArt(art)}
-                  className="bg-sky-500 text-white px-3 py-1 rounded"
+                  className="btn btn-primary px-10 py-1 rounded"
                 >
                   Update
                 </button>
                 <button
                   onClick={() => handleDelete(art._id)}
-                  className="bg-red-500 text-white px-3 py-1 rounded"
+                  className="bg-red-500 text-white px-10 py-1 rounded"
                 >
                   Delete
                 </button>

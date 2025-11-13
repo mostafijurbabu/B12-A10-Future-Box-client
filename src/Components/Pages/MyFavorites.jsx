@@ -42,7 +42,7 @@ const MyFavorites = () => {
             <p className="font-bold mt-1">${art.price}</p>
             <button
               onClick={() => removeFavorite(art._id)}
-              className="bg-red-500 text-white px-3 py-1 rounded mt-2"
+              className="btn btn-primary  text-white px-10 py-1 rounded mt-2"
             >
               Remove
             </button>

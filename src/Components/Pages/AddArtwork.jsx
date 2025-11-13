@@ -126,7 +126,7 @@ const AddArtwork = () => {
           <button
             type="submit"
             disabled={loading}
-            className={`btn w-full text-white mt-6 rounded-full bg-gradient-to-r from-sky-500 to-red-600 hover:from-sky-600 hover:to-red-700 ${
+            className={`btn w-full text-white mt-6 rounded-full bg-linear-to-r from-sky-500 to-red-600 hover:from-sky-600 hover:to-red-700 ${
               loading ? "opacity-50 cursor-not-allowed" : ""
             }`}
           >
