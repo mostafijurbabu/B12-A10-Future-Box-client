@@ -1,17 +1,21 @@
 import React, { useContext, useState } from "react";
 import { FcGoogle } from "react-icons/fc";
-import { Link, useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../Context/AuthProvider";
 
 const Registration = () => {
-  const { createUser, setUser, updateUser } = useContext(AuthContext);
+  const { createUser, updateUser, signInWithGoogle } = useContext(AuthContext);
   const [nameError, setNameError] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const validatePassword = (password) => {
-    const regex = /^(?=.*[a-z])(?=.*[A-Z]).{6,}$/;
-    return regex.test(password);
+  const validatePassword = (password) =>
+    /^(?=.*[a-z])(?=.*[A-Z]).{6,}$/.test(password);
+
+  const handleGoogleLogin = () => {
+    signInWithGoogle()
+      .then(() => navigate("/"))
+      .catch(console.log);
   };
 
   const handleRegister = (e) => {
@@ -23,109 +27,69 @@ const Registration = () => {
     const pwd = form.password.value;
 
     if (name.length < 5) {
-      setNameError("Name should be more than 5 characters");
+      setNameError("Name must be at least 5 characters");
       return;
-    } else {
-      setNameError("");
-    }
+    } else setNameError("");
 
     if (!validatePassword(pwd)) {
-      alert(
-        "Password must be at least 6 characters, include uppercase and lowercase letters!"
-      );
+      alert("Password must be 6+ chars with uppercase & lowercase");
       return;
     }
 
     createUser(email, pwd)
-      .then((result) => {
-        const user = result.user;
-        updateUser({ displayName: name, photoURL: photo })
-          .then(() => {
-            setUser({ ...user, displayName: name, photoURL: photo });
-            navigate("/");
-          })
-          .catch((error) => {
-            console.log(error);
-            setUser(user);
-          });
-      })
-      .catch((error) => {
-        alert(error.message);
-      });
+      .then((result) => updateUser({ displayName: name, photoURL: photo }))
+      .then(() => navigate("/"))
+      .catch((err) => alert(err.message));
   };
 
   return (
     <div className="bg-base-200 flex justify-center min-h-screen items-center">
-      <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
-        <h2 className="font-semibold text-2xl text-center pt-4">
-          Register your account
-        </h2>
+      <div className="card bg-base-100 w-full max-w-sm shadow-2xl">
+        <h2 className="font-semibold text-2xl text-center pt-4">Register</h2>
         <form onSubmit={handleRegister} className="card-body">
-          <fieldset className="fieldset">
-            {/* Name */}
-            <label className="label">Name</label>
-            <input
-              name="name"
-              type="text"
-              className="input"
-              placeholder="Name"
-              required
-            />
-            {nameError && <p className="text-xs text-error">{nameError}</p>}
+          <label className="label">Name</label>
+          <input name="name" type="text" className="input" required />
+          {nameError && <p className="text-red-500 text-xs">{nameError}</p>}
 
-            {/* Email */}
-            <label className="label">Email</label>
-            <input
-              name="email"
-              type="email"
-              className="input"
-              placeholder="Email"
-              required
-            />
+          <label className="label">Email</label>
+          <input name="email" type="email" className="input" required />
 
-            {/* Photo URL */}
-            <label className="label">PhotoURL</label>
-            <input
-              name="photo"
-              type="text"
-              className="input"
-              placeholder="Photo URL"
-              required
-            />
+          <label className="label">Photo URL</label>
+          <input name="photo" type="text" className="input" required />
 
-            {/* Password */}
-            <label className="label">Password</label>
-            <input
-              name="password"
-              type="password"
-              className="input"
-              placeholder="Password"
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
+          <label className="label">Password</label>
+          <input
+            name="password"
+            type="password"
+            className="input"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
 
-            {password && !validatePassword(password) && (
-              <p className="text-xs text-error mt-1">
-                Password must be 6+ characters, include uppercase & lowercase.
-              </p>
-            )}
-
-            {/* Buttons */}
-            <button type="submit" className="btn btn-primary mt-4">
-              Register
-            </button>
-            <button className="btn btn-primary btn-outline mt-4">
-              <FcGoogle size={24} /> Login With Google
-            </button>
-
-            <p className="font-semibold text-center pt-3">
-              Already Have An Account ?{" "}
-              <Link to="/auth/login" className="text-red-500">
-                Login
-              </Link>
+          {password && !validatePassword(password) && (
+            <p className="text-red-500 text-xs mt-1">
+              Password must be 6+ chars, include uppercase & lowercase
             </p>
-          </fieldset>
+          )}
+
+          <button type="submit" className="btn btn-primary mt-4">
+            Register
+          </button>
+          <button
+            type="button"
+            onClick={handleGoogleLogin}
+            className="btn btn-outline btn-primary mt-4"
+          >
+            <FcGoogle size={24} /> Login With Google
+          </button>
+
+          <p className="text-center pt-3">
+            Already have an account?{" "}
+            <Link to="/auth/login" className="text-red-500">
+              Login
+            </Link>
+          </p>
         </form>
       </div>
     </div>

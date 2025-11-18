@@ -12,7 +12,7 @@ const MyGallery = () => {
   useEffect(() => {
     if (user?.email) {
       fetch(
-        `http://localhost:3000/my-gallery?user=${
+        `https://b12-a10-future-box-server-snowy.vercel.app/my-gallery?user=${
           user.displayName || user.email
         }`
       )
@@ -33,7 +33,10 @@ const MyGallery = () => {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        fetch(`http://localhost:3000/artwork/${id}`, { method: "DELETE" })
+        fetch(
+          `https://b12-a10-future-box-server-snowy.vercel.app/artwork/${id}`,
+          { method: "DELETE" }
+        )
           .then((res) => res.json())
           .then(() => {
             setMyArts(myArts.filter((art) => art._id !== id));
@@ -53,11 +56,14 @@ const MyGallery = () => {
       description: form.description.value,
     };
 
-    fetch(`http://localhost:3000/artwork/${selectedArt._id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(updatedArt),
-    })
+    fetch(
+      `https://b12-a10-future-box-server-snowy.vercel.app/artwork/${selectedArt._id}`,
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updatedArt),
+      }
+    )
       .then((res) => res.json())
       .then(() => {
         toast.success("Artwork updated successfully!");

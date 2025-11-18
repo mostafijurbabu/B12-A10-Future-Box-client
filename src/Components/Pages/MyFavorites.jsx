@@ -8,17 +8,22 @@ const MyFavorites = () => {
 
   useEffect(() => {
     if (!user?.email) return;
-    fetch(`http://localhost:3000/favorites?email=${user.email}`)
+    fetch(
+      `https://b12-a10-future-box-server-snowy.vercel.app/favorites?email=${user.email}`
+    )
       .then((res) => res.json())
       .then((data) => setFavorites(data));
   }, [user]);
 
   const removeFavorite = (id) => {
-    fetch(`http://localhost:3000/favorites/${id}/remove`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userEmail: user.email }),
-    })
+    fetch(
+      `https://b12-a10-future-box-server-snowy.vercel.app/favorites/${id}/remove`,
+      {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userEmail: user.email }),
+      }
+    )
       .then(() => setFavorites(favorites.filter((f) => f._id !== id)))
       .then(() => toast.success("Removed from favorites"));
   };

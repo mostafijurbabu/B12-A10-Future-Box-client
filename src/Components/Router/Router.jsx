@@ -9,47 +9,63 @@ import Login from "../Auth/Login";
 import Registration from "../Auth/Registration";
 import AuthLayout from "../Layout/AuthLayout";
 import ArtworkDetails from "../Pages/ArtworkDetails";
-import Loading from "../Loading";
+import Loading from "../../Components/Loading";
 import PrivateRouter from "../Router/PrivateRouter";
+
+const BASE_URL = "https://b12-a10-future-box-server-snowy.vercel.app";
 
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <MainLayout></MainLayout>,
+    element: <MainLayout />,
     children: [
       {
         index: true,
-        element: <Home></Home>,
-        loader: () => fetch("http://localhost:3000/featured-artwork-section"),
+        element: <Home />,
+        loader: async () => {
+          try {
+            const res = await fetch(`${BASE_URL}/artwork`);
+            if (!res.ok) throw new Error("Failed to fetch artwork");
+            return res.json();
+          } catch (error) {
+            console.error(error);
+            return [];
+          }
+        },
         hydrateFallbackElement: <Loading />,
       },
       {
-        path: "explore_artworks",
-        element: <ExploreArtworks></ExploreArtworks>,
-        loader: () => fetch("http://localhost:3000/artwork"),
+        path: "explore_artwork",
+        element: <ExploreArtworks />,
+        loader: async () => {
+          try {
+            const res = await fetch(`${BASE_URL}/artwork`);
+            if (!res.ok) throw new Error("Failed to fetch artwork");
+            return res.json();
+          } catch (error) {
+            console.error(error);
+            return [];
+          }
+        },
         hydrateFallbackElement: <Loading />,
       },
       {
-        path: "/artwork/:id",
-        element: (
-          <PrivateRouter>
-            <ArtworkDetails />
-          </PrivateRouter>
-        ),
-        loader: ({ params }) =>
-          fetch(`http://localhost:3000/artwork/${params.id}`),
+        path: "artwork/:id",
+        element: <ArtworkDetails />,
+        loader: async ({ params }) => {
+          try {
+            const res = await fetch(`${BASE_URL}/artwork/${params.id}`);
+            if (!res.ok) throw new Error("Failed to fetch artwork details");
+            return res.json();
+          } catch (error) {
+            console.error(error);
+            return { result: {} };
+          }
+        },
         hydrateFallbackElement: <Loading />,
       },
       {
-        path: "add_artworks",
-        element: (
-          <PrivateRouter>
-            <AddArtwork />
-          </PrivateRouter>
-        ),
-      },
-      {
-        path: "add_artworks/:id",
+        path: "add_artwork",
         element: (
           <PrivateRouter>
             <AddArtwork />
@@ -72,28 +88,14 @@ export const router = createBrowserRouter([
           </PrivateRouter>
         ),
       },
-      {
-        path: "my_favorites/:id",
-        element: (
-          <PrivateRouter>
-            <MyFavorites />
-          </PrivateRouter>
-        ),
-      },
     ],
   },
   {
     path: "/auth",
-    element: <AuthLayout></AuthLayout>,
+    element: <AuthLayout />,
     children: [
-      {
-        path: "/auth/login",
-        element: <Login></Login>,
-      },
-      {
-        path: "/auth/registration",
-        element: <Registration></Registration>,
-      },
+      { path: "login", element: <Login /> },
+      { path: "registration", element: <Registration /> },
     ],
   },
 ]);

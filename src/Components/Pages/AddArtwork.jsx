@@ -29,7 +29,7 @@ const AddArtwork = () => {
 
     setLoading(true);
 
-    fetch("http://localhost:3000/artwork", {
+    fetch("https://b12-a10-future-box-server-snowy.vercel.app/artwork", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formData),

@@ -1,42 +1,94 @@
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import toast from "react-hot-toast";
 
-export const ArtCard = ({ artwork }) => {
-  const { image, title, category, description, _id } = artwork;
+const ArtCard = ({ art, userEmail }) => {
+  const [likes, setLikes] = useState(art.like || 0);
+  const [favorited, setFavorited] = useState(
+    art.favorited_by?.includes(userEmail) || false
+  );
+
+  const handleLike = async () => {
+    try {
+      const res = await fetch(
+        `https://b12-a10-future-box-server-snowy.vercel.app/artwork/${art._id}/like`,
+        { method: "PATCH" }
+      );
+      const data = await res.json();
+      if (data.success) {
+        setLikes(likes + 1);
+        toast.success("Liked!");
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to like artwork.");
+    }
+  };
+
+  const handleFavorite = async () => {
+    if (!userEmail) return toast.error("Login to favorite");
+    try {
+      const url = favorited
+        ? `https://b12-a10-future-box-server-snowy.vercel.app/favorites/${art._id}/remove`
+        : `https://b12-a10-future-box-server-snowy.vercel.app/artwork/${art._id}/favorite`;
+
+      const res = await fetch(url, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userEmail }),
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        setFavorited(!favorited);
+        toast.success(
+          favorited ? "Removed from favorites" : "Added to favorites!"
+        );
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to update favorites.");
+    }
+  };
+
   return (
-    <div className="card bg-base-100 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
-      <figure className="h-48 overflow-hidden">
-        <img
-          src={image}
-          alt={title}
-          className="p-4 rounded-xl w-full h-full object-cover hover:scale-110 transition-transform duration-300"
-        />
-      </figure>
-      <div className="card-body">
-        <h2 className="card-title">{title}</h2>
-        <div className="badge text-xs badge-xs badge-secondary rounded-full">
-          {category}
-        </div>
-        <p className="line-clamp-1">{description}</p>
-        {/* <p className="text-sm text-base-content/70">by {author}</p> */}
-        <div className="card-actions justify-between items-center mt-4">
-          <div className="flex gap-4 text-sm text-base-content/60">
-            {/* <span className="flex items-center gap-1">
-              <Eye className="w-4 h-4" />
-              {views}
-            </span> */}
-            {/* <span className="flex items-center gap-1">
-              <Heart className="w-4 h-4" />
-              {likes}
-            </span> */}
-          </div>
-          <Link
-            to={`/artwork/${artwork._id}`}
-            className="btn rounded-full bg-linear-to-r from-sky-500 to-red-600 hover:from-red-600 hover:to-sky-500 text-white w-full btn-sm"
+    <div className="border rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
+      <img
+        src={art.image}
+        alt={art.title}
+        className="w-full h-64 object-cover"
+      />
+      <div className="p-4">
+        <h3 className="text-xl font-bold">{art.title}</h3>
+        <p className="text-gray-600">{art.category}</p>
+        <p className="font-bold">${art.price}</p>
+
+        <div className="mt-4 flex justify-between items-center">
+          <button
+            onClick={handleLike}
+            className="px-3 py-1 bg-red-500 text-white rounded"
           >
-            View Details
-          </Link>
+            {likes}
+          </button>
+          <button
+            onClick={handleFavorite}
+            className={`px-3 py-1 rounded ${
+              favorited ? "bg-yellow-400 text-black" : "bg-gray-300 text-black"
+            }`}
+          >
+            {favorited ? "Favorited" : "Favorite"}
+          </button>
         </div>
+
+        <Link
+          to={`/artwork/${art._id}`}
+          className="mt-3 inline-block px-4 py-2 bg-blue-500 text-white rounded w-full text-center"
+        >
+          View Details
+        </Link>
       </div>
     </div>
   );
 };
+
+export default ArtCard;
