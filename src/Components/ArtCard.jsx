@@ -66,14 +66,14 @@ const ArtCard = ({ art, userEmail }) => {
         <div className="mt-4 flex justify-between items-center">
           <button
             onClick={handleLike}
-            className="px-3 py-1 bg-red-500 text-white rounded"
+            className="px-6 py-1 bg-red-500 text-white rounded-full"
           >
             {likes}
           </button>
           <button
             onClick={handleFavorite}
-            className={`px-3 py-1 rounded ${
-              favorited ? "bg-yellow-400 text-black" : "bg-gray-300 text-black"
+            className={`px-5 py-1 rounded-full ${
+              favorited ? "bg-yellow-400 text-black" : "bg-slate-300 text-black"
             }`}
           >
             {favorited ? "Favorited" : "Favorite"}
@@ -82,7 +82,7 @@ const ArtCard = ({ art, userEmail }) => {
 
         <Link
           to={`/artwork/${art._id}`}
-          className="mt-3 inline-block px-4 py-2 bg-blue-500 text-white rounded w-full text-center"
+          className="mt-3 inline-block px-4 py-2 bg-sky-600 text-white rounded-full w-full text-center"
         >
           View Details
         </Link>

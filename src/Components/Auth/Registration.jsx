@@ -12,11 +12,10 @@ const Registration = () => {
   const validatePassword = (password) =>
     /^(?=.*[a-z])(?=.*[A-Z]).{6,}$/.test(password);
 
-  const handleGoogleLogin = () => {
+  const handleGoogleLogin = () =>
     signInWithGoogle()
       .then(() => navigate("/"))
       .catch(console.log);
-  };
 
   const handleRegister = (e) => {
     e.preventDefault();
@@ -26,18 +25,15 @@ const Registration = () => {
     const photo = form.photo.value;
     const pwd = form.password.value;
 
-    if (name.length < 5) {
-      setNameError("Name must be at least 5 characters");
-      return;
-    } else setNameError("");
+    if (name.length < 5)
+      return setNameError("Name must be at least 5 characters");
+    else setNameError("");
 
-    if (!validatePassword(pwd)) {
-      alert("Password must be 6+ chars with uppercase & lowercase");
-      return;
-    }
+    if (!validatePassword(pwd))
+      return alert("Password must be 6+ chars with uppercase & lowercase");
 
     createUser(email, pwd)
-      .then((result) => updateUser({ displayName: name, photoURL: photo }))
+      .then(() => updateUser({ displayName: name, photoURL: photo }))
       .then(() => navigate("/"))
       .catch((err) => alert(err.message));
   };
@@ -45,18 +41,15 @@ const Registration = () => {
   return (
     <div className="bg-base-200 flex justify-center min-h-screen items-center">
       <div className="card bg-base-100 w-full max-w-sm shadow-2xl">
-        <h2 className="font-semibold text-2xl text-center pt-4">Register</h2>
+        <h2 className="text-2xl font-semibold text-center pt-4">Register</h2>
         <form onSubmit={handleRegister} className="card-body">
           <label className="label">Name</label>
           <input name="name" type="text" className="input" required />
           {nameError && <p className="text-red-500 text-xs">{nameError}</p>}
-
           <label className="label">Email</label>
           <input name="email" type="email" className="input" required />
-
           <label className="label">Photo URL</label>
           <input name="photo" type="text" className="input" required />
-
           <label className="label">Password</label>
           <input
             name="password"
@@ -66,13 +59,11 @@ const Registration = () => {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-
           {password && !validatePassword(password) && (
             <p className="text-red-500 text-xs mt-1">
               Password must be 6+ chars, include uppercase & lowercase
             </p>
           )}
-
           <button type="submit" className="btn btn-primary mt-4">
             Register
           </button>
@@ -83,7 +74,6 @@ const Registration = () => {
           >
             <FcGoogle size={24} /> Login With Google
           </button>
-
           <p className="text-center pt-3">
             Already have an account?{" "}
             <Link to="/auth/login" className="text-red-500">

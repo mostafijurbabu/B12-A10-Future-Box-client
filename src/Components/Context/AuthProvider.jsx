@@ -24,12 +24,15 @@ const AuthProvider = ({ children }) => {
     return createUserWithEmailAndPassword(auth, email, password);
   };
 
-  const signIn = (email, password) => {
+  const login = (email, password) => {
     setLoading(true);
     return signInWithEmailAndPassword(auth, email, password);
   };
 
-  const signInWithGoogle = () => signInWithPopup(auth, googleProvider);
+  const signInWithGoogle = () => {
+    setLoading(true);
+    return signInWithPopup(auth, googleProvider);
+  };
 
   const updateUser = (data) => updateProfile(auth.currentUser, data);
 
@@ -47,13 +50,12 @@ const AuthProvider = ({ children }) => {
     <AuthContext.Provider
       value={{
         user,
-        setUser,
-        createUser,
-        signIn,
-        logOut,
         loading,
-        updateUser,
+        createUser,
+        login,
         signInWithGoogle,
+        updateUser,
+        logOut,
       }}
     >
       {children}
