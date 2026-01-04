@@ -16,7 +16,7 @@ export default function Home() {
 
   return (
     <div className="max-w-7xl mx-auto">
-      <h2 className="text-5xl text-red-500 font-bold text-center pt-10">
+      <h2 className="text-2xl lg:text-4xl text-red-500 font-bold text-center pt-10">
         We don’t create art…{" "}
         <span className="text-sky-600">art creates us</span>
       </h2>
@@ -33,7 +33,7 @@ export default function Home() {
         {[colorImage, natureImage, boatImage].map((img, idx) => (
           <SwiperSlide key={idx}>
             <img
-              className="w-full h-[450px] object-cover rounded-xl mb-10"
+              className="w-full h-[250px] p-2 lg:h-[650px] object-cover rounded-xl mb-10"
               src={img}
               alt={`slide-${idx}`}
             />
@@ -42,10 +42,10 @@ export default function Home() {
       </Swiper>
 
       <div>
-        <h2 className="text-5xl text-center font-bold text-red-500 pb-10">
+        <h2 className="text-2xl lg:text-4xl text-center font-bold text-red-500 pb-10">
           Latest <span className="text-sky-600">Artworks</span>
         </h2>
-        <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 p-4 lg:grid-cols-4 gap-4">
           {artwork.length > 0 ? (
             artwork.map((art) => (
               <ArtCard key={art._id} art={art} userEmail={user?.email} />

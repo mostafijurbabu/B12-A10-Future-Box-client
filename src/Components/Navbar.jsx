@@ -36,10 +36,18 @@ const Navbar = () => {
 
       <div className="navbar-center hidden lg:flex gap-4 font-semibold">
         <NavLink to="/">Home</NavLink>
+        <NavLink to="/">About</NavLink>
         <NavLink to="/explore_artwork">Explore Artworks</NavLink>
         <NavLink to="/add_artwork">Add Artwork</NavLink>
-        <NavLink to="/my_gallery">My Gallery</NavLink>
-        <NavLink to="/my_favorites">My Favorites</NavLink>
+        <NavLink to="/gallery">Gallery</NavLink>
+        <NavLink to="/favorites">Favorites</NavLink>
+        <NavLink to="/">Contact</NavLink>
+
+        {user && (
+          <>
+            <NavLink to="/dashboard/art_gallery">Art Gallery</NavLink>
+          </>
+        )}
       </div>
 
       <div className="navbar-end flex items-center gap-3">
@@ -78,7 +86,7 @@ const Navbar = () => {
             </ul>
           </div>
         ) : (
-          <Link to="/auth/login" className="btn btn-primary px-10">
+          <Link to="/auth/login" className="btn btn-primary px-4 lg:px-10">
             Login
           </Link>
         )}

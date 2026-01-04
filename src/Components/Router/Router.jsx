@@ -3,14 +3,19 @@ import MainLayout from "../Layout/MainLayout";
 import Home from "../Home/Home";
 import ExploreArtworks from "../Pages/ExploreArtworks";
 import AddArtwork from "../Pages/AddArtwork";
-import MyGallery from "../Pages/MyGallery";
-import MyFavorites from "../Pages/MyFavorites";
 import Login from "../Auth/Login";
 import Registration from "../Auth/Registration";
 import AuthLayout from "../Layout/AuthLayout";
 import ArtworkDetails from "../Pages/ArtworkDetails";
 import Loading from "../../Components/Loading";
 import PrivateRouter from "../Router/PrivateRouter";
+import Gallery from "../Pages/Gallery";
+import Favorites from "../Pages/Favorites";
+import DashboardLayout from "../Layout/DashboardLayout";
+import ArtGallery from "../Pages/Dashboard/ArtGallery/ArtGallery";
+import Payment from "../Pages/Dashboard/Payment/Payment";
+import PaymentSuccess from "../Pages/Dashboard/Payment/PaymentSuccess";
+import PaymentCancelled from "../Pages/Dashboard/Payment/PaymentCancelled";
 
 const BASE_URL = "https://b12-a10-future-box-server-snowy.vercel.app";
 
@@ -73,18 +78,18 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "my_gallery",
+        path: "gallery",
         element: (
           <PrivateRouter>
-            <MyGallery />
+            <Gallery />
           </PrivateRouter>
         ),
       },
       {
-        path: "my_favorites",
+        path: "favorites",
         element: (
           <PrivateRouter>
-            <MyFavorites />
+            <Favorites />
           </PrivateRouter>
         ),
       },
@@ -96,6 +101,32 @@ export const router = createBrowserRouter([
     children: [
       { path: "login", element: <Login /> },
       { path: "registration", element: <Registration /> },
+    ],
+  },
+  {
+    path: "dashboard",
+    element: (
+      <PrivateRouter>
+        <DashboardLayout></DashboardLayout>
+      </PrivateRouter>
+    ),
+    children: [
+      {
+        path: "art_gallery",
+        element: <ArtGallery />,
+      },
+      {
+        path: "payment/:artId",
+        Component: Payment,
+      },
+      {
+        path: "payment-success",
+        Component: PaymentSuccess,
+      },
+      {
+        path: "payment-cancelled",
+        Component: PaymentCancelled,
+      },
     ],
   },
 ]);

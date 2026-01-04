@@ -11,7 +11,7 @@ const ArtCard = ({ art, userEmail }) => {
   const handleLike = async () => {
     try {
       const res = await fetch(
-        `https://b12-a10-future-box-server-snowy.vercel.app/artwork/${art._id}/like`,
+        `hhttps://b12-a10-future-box-server-snowy.vercel.app/artwork/${art._id}/like`,
         { method: "PATCH" }
       );
       const data = await res.json();
@@ -29,8 +29,8 @@ const ArtCard = ({ art, userEmail }) => {
     if (!userEmail) return toast.error("Login to favorite");
     try {
       const url = favorited
-        ? `https://b12-a10-future-box-server-snowy.vercel.app/favorites/${art._id}/remove`
-        : `https://b12-a10-future-box-server-snowy.vercel.app/artwork/${art._id}/favorite`;
+        ? `hhttps://b12-a10-future-box-server-snowy.vercel.app/favorites/${art._id}/remove`
+        : `hhttps://b12-a10-future-box-server-snowy.vercel.app/artwork/${art._id}/favorite`;
 
       const res = await fetch(url, {
         method: "PATCH",

@@ -83,6 +83,7 @@ const ArtworkDetails = () => {
       />
       <h2 className="text-3xl font-bold mb-2">{art.title || "Untitled"}</h2>
       <p className="text-gray-600 mb-1">By: {art.created_by || "Unknown"}</p>
+      <p className="text-gray-600 mb-1">By: {art.description || "Unknown"}</p>
       <p className="text-gray-600 mb-1">
         Category: {art.category || "Uncategorized"}
       </p>

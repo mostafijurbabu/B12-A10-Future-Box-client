@@ -3,7 +3,7 @@ import Swal from "sweetalert2";
 import toast from "react-hot-toast";
 import { useAuth } from "../../Hooks/useAuth";
 
-const MyGallery = () => {
+const Gallery = () => {
   const { user } = useAuth();
   const [myArts, setMyArts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -85,7 +85,7 @@ const MyGallery = () => {
 
   return (
     <div className="max-w-6xl mx-auto px-6 py-10">
-      <h2 className="text-3xl font-bold mb-6 text-center"> My Gallery</h2>
+      <h2 className="text-4xl font-bold mb-6 text-center">Gallery</h2>
 
       {myArts.length === 0 ? (
         <p className="text-center text-gray-500">
@@ -182,4 +182,4 @@ const MyGallery = () => {
   );
 };
 
-export default MyGallery;
+export default Gallery;

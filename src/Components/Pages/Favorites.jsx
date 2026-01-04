@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useAuth } from "../../Hooks/useAuth";
 import toast from "react-hot-toast";
 
-const MyFavorites = () => {
+const Favorites = () => {
   const { user } = useAuth();
   const [favorites, setFavorites] = useState([]);
 
@@ -33,7 +33,7 @@ const MyFavorites = () => {
 
   return (
     <div className="max-w-6xl mx-auto px-6 py-10">
-      <h2 className="text-3xl font-bold mb-6 text-center">My Favorites</h2>
+      <h2 className="text-4xl font-bold mb-6 text-center">Favorites</h2>
       <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
         {favorites.map((art) => (
           <div key={art._id} className="border rounded-xl p-4 shadow bg-white">
@@ -58,4 +58,4 @@ const MyFavorites = () => {
   );
 };
 
-export default MyFavorites;
+export default Favorites;
